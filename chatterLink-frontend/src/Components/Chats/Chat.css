@@ -1,0 +1,453 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ─── Root container: full viewport ─── */
+.chat-container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    background-color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+    width: 320px;
+    min-width: 320px;
+    height: 100vh;
+    background-color: #F7F7F5;
+    border-right: 1px solid #E9E9E7;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sidebar-header {
+    padding: 24px 20px 12px 20px;
+    border-bottom: 1px solid #E9E9E7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-workspace {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sidebar-workspace-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #191919;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sidebar-workspace-icon span {
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.sidebar-workspace-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #191919;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-icon-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #787774;
+    transition: background 0.15s ease, color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.sidebar-icon-btn:hover {
+    background: rgba(0,0,0,0.06);
+    color: #191919;
+}
+
+.sidebar-icon-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* ─── Sidebar Sections ─── */
+.sidebar-section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #ADADAD;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 20px 20px 8px 20px;
+}
+
+.sidebar-contacts-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.sidebar-contacts-list::-webkit-scrollbar {
+    width: 3px;
+}
+
+.sidebar-contacts-list::-webkit-scrollbar-thumb {
+    background: #E9E9E7;
+    border-radius: 3px;
+}
+
+/* ─── Add Contact Row ─── */
+.sidebar-add-contact-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    margin: 0 8px 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.sidebar-add-contact-row:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.sidebar-add-contact-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    color: #191919;
+    outline: none;
+    padding: 4px 0;
+}
+
+.sidebar-add-contact-input::placeholder {
+    color: #ADADAD;
+}
+
+/* ─── Contact Tab ─── */
+.contact-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin: 2px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s ease;
+    border: none;
+    background: transparent;
+}
+
+.contact-tab:hover {
+    background: rgba(0,0,0,0.06);
+}
+
+.contact-tab.active {
+    background: rgba(0,0,0,0.06);
+}
+
+.contact-tab-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #E9E9E7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #37352F;
+    flex-shrink: 0;
+}
+
+.contact-tab > p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #37352F;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─── Sidebar Footer ─── */
+.sidebar-footer {
+    padding: 16px 20px;
+    border-top: 1px solid #E9E9E7;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.sidebar-user-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #191919;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.sidebar-username {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #37352F;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─── Chat Window (right side) ─── */
+.chat-window {
+    flex: 1;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: 0;
+}
+
+/* ─── Chat Header bar ─── */
+.chat-header {
+    width: 100%;
+    border-bottom: 1px solid #E9E9E7;
+    height: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background-color: #FFFFFF;
+    gap: 10px;
+}
+
+.chat-header-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #191919;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-header-subtitle {
+    font-size: 0.75rem;
+    color: #ADADAD;
+    font-weight: 400;
+}
+
+.chat-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #24B47E;
+    flex-shrink: 0;
+}
+
+/* ─── Old bootstrap container override ─── */
+.container {
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ─── Chat Box ─── */
+.chat-box {
+    flex: 1;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* ─── Chat Data ─── */
+.chat-data-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.chat-messages-data {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 24px max(40px, calc(50% - 350px));
+    gap: 2px;
+    background-color: #FFFFFF;
+}
+
+.chat-messages-data::-webkit-scrollbar {
+    width: 4px;
+}
+
+.chat-messages-data::-webkit-scrollbar-thumb {
+    background: #E9E9E7;
+    border-radius: 4px;
+}
+
+/* ─── Message input area ─── */
+.send-message-container {
+    width: 100%;
+    padding: 12px max(40px, calc(50% - 350px)) 24px max(40px, calc(50% - 350px));
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #FFFFFF;
+}
+
+.send-input-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #F7F7F5;
+    border: 1px solid #E9E9E7;
+    border-radius: 8px;
+    padding: 10px 14px;
+    gap: 8px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.send-input-wrapper:focus-within {
+    border-color: #000000;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    background: #FFFFFF;
+}
+
+.send-input-field {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    color: #191919;
+    outline: none;
+}
+
+.send-input-field::placeholder {
+    color: #ADADAD;
+}
+
+.send-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #191919;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+}
+
+.send-btn:hover {
+    background: #37352F;
+}
+
+.send-btn svg {
+    width: 15px;
+    height: 15px;
+    color: white;
+    fill: white;
+}
+
+/* ─── Empty states ─── */
+.not-contacts-container {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.not-contacts-container p {
+    color: #ADADAD;
+    font-size: 0.8rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+.messages-not-found {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.messages-not-found p {
+    color: #ADADAD;
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+
+/* ─── No chat selected ─── */
+.no-chat-selected {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.no-chat-selected p {
+    font-size: 0.875rem;
+    color: #ADADAD;
+    font-weight: 400;
+}
+
+.no-chat-selected h3 {
+    font-size: 1rem;
+    color: #37352F;
+    font-weight: 600;
+}

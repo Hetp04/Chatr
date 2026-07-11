@@ -1,0 +1,77 @@
+name: CI/CD trigger
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  FRONT_END_IMAGE: 5starrrfahd/chatter-link-frontend
+  BACKED_END_IMAGE: 5starrrfahd/chatter-link-server
+  GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest 
+    outputs:
+      sha: ${{ steps.short-sha.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: GET short SHA 
+        id: short-sha 
+        run: echo "::set-output name=sha::$(git rev-parse --short=7 ${{ github.sha }})"
+      
+      - name: Prepare Docker tags
+        id: docker-tags 
+        run: |
+          COMMIT_SHA=${{ steps.short-sha.outputs.sha }}
+          echo "COMMIT_SHA_TAG=$COMMIT_SHA" >> $GITHUB_ENV
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION_TAG=${GITHUB_REF/refs\/tags\//}
+            echo "VERSION_TAG=$VERSION_TAG" >> $GITHUB_ENV
+            TAGS="$VERSION_TAG,$COMMIT_SHA,latest"
+          else
+            TAGS="$COMMIT_SHA,latest"
+          fi
+          echo "DOCKER_IMAGE_TAGS=$TAGS" >> $GITHUB_ENV
+      
+      - name: Build and Push Docker image 
+        run: |
+          FRONTEND_IMAGE=${{ env.FRONT_END_IMAGE }}
+          BACKEND_IMAGE=${{ env.BACKED_END_IMAGE  }}
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}
+
+          docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+
+          docker build chatterLink-server/. -t $BACKEND_IMAGE
+          docker build chatterLink-frontend/. -t $FRONTEND_IMAGE
+
+          IFS=',' read -ra TAGS <<< "$DOCKER_IMAGE_TAGS"
+          for TAG in "${TAGS[@]}"; do
+            docker tag $FRONTEND_IMAGE $FRONTEND_IMAGE:$TAG
+            docker tag $BACKEND_IMAGE $BACKEND_IMAGE:$TAG
+            docker push $BACKEND_IMAGE:$TAG
+            docker push $FRONTEND_IMAGE:$TAG
+          done
+  Update-helm-charts:
+    needs: build-and-push
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone manifest from gitlab
+        run: |
+          TOKEN=${{ env.GITLAB_TOKEN }}
+          git clone https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/fahd209/chatter-link-manifest.git
+      - name: Update helm charts values 
+        run: |
+          cd chatter-link-manifest 
+          cd chatter-link
+          IMAGE_TAG=${{ needs.build-and-push.outputs.sha }}
+          sed -i "s|^\(.*tag: \).*|\1\"$IMAGE_TAG\"|" values.yaml
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add values.yaml
+          git commit -m "Updating helm image tag to $IMAGE_TAG" 
+          git push origin main 
+
