@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  FRONT_END_IMAGE: 5starrrfahd/chatter-link-frontend
-  BACKED_END_IMAGE: 5starrrfahd/chatter-link-server
+  FRONT_END_IMAGE: hpate384/chatter-link-frontend
+  BACKED_END_IMAGE: hpate384/chatter-link-server
   GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
 
 jobs:
@@ -62,10 +62,10 @@ jobs:
       - name: Clone manifest from gitlab
         run: |
           TOKEN=${{ env.GITLAB_TOKEN }}
-          git clone https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/fahd209/chatter-link-manifest.git
+          git clone https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/phraze-group/chatter-link-k8.git
       - name: Update helm charts values 
         run: |
-          cd chatter-link-manifest 
+          cd chatter-link-k8 
           cd chatter-link
           IMAGE_TAG=${{ needs.build-and-push.outputs.sha }}
           sed -i "s|^\(.*tag: \).*|\1\"$IMAGE_TAG\"|" values.yaml
@@ -73,5 +73,5 @@ jobs:
           git config --global user.name "GitHub Actions"
           git add values.yaml
           git commit -m "Updating helm image tag to $IMAGE_TAG" 
-          git push origin main 
+          git push origin main  
 
