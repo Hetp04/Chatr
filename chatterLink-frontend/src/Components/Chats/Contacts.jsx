@@ -30,7 +30,10 @@ function Contacts({ onUserClick }) {
                 { headers: { "Authorization": `Bearer ${currentUser.token}` } }
             )
             .then(res => { setContactList(res.data.contactList) })
-            .catch(() => {})
+            .catch((err) => {
+                const errMsg = err.response?.data || "Failed to add contact. Please make sure you are typing their exact registered EMAIL address.";
+                alert(errMsg);
+            })
             setTargetUserContact('')
         }
     }
