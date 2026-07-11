@@ -31,7 +31,10 @@ function Contacts({ onUserClick }) {
             )
             .then(res => { setContactList(res.data.contactList) })
             .catch((err) => {
-                const errMsg = err.response?.data || "Failed to add contact. Please make sure you are typing their exact registered EMAIL address.";
+                const data = err.response?.data;
+                const errMsg = typeof data === 'string'
+                    ? data
+                    : (data?.message || data?.error || "Failed to add contact. Please make sure you are typing their exact registered EMAIL address.");
                 alert(errMsg);
             })
             setTargetUserContact('')
