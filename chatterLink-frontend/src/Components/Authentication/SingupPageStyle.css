@@ -12,18 +12,6 @@
     font-family: 'Inter', sans-serif;
 }
 
-/* Left decorative panel */
-.auth-page-container::before {
-    content: '';
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 40%;
-    height: 100vh;
-    background-color: #F7F7F5;
-    border-right: 1px solid #E9E9E7;
-    z-index: 0;
-}
 
 .signIn-container {
     position: relative;
