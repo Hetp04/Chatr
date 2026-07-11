@@ -1,4 +1,4 @@
-# Spring config
+# Application config
 spring.application.name: blogIn
 
 server.port: 8081
