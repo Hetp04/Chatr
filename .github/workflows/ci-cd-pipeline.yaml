@@ -54,3 +54,25 @@ jobs:
             docker push $BACKEND_IMAGE:$TAG
             docker push $FRONTEND_IMAGE:$TAG
           done
+  Update-helm-charts:
+    needs: build-and-push
+    runs-on: ubuntu-latest 
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone manifest from gitlab
+        run: |
+          TOKEN=${{ env.GITLAB_TOKEN }}
+          git clone https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/phraze-group/chatter-link-k8.git
+      - name: Update helm charts values 
+        run: |
+          cd chatter-link-k8 
+          cd chatter-link
+          IMAGE_TAG=${{ needs.build-and-push.outputs.sha }}
+          sed -i "s|^\(.*tag: \).*|\1\"$IMAGE_TAG\"|" values.yaml
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add values.yaml
+          git commit -m "Updating helm image tag to $IMAGE_TAG" 
+          git push origin main  
+
